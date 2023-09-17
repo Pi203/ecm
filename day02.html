@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đặt hàng</title>
+    <style>
+        .order-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .order-form label,
+        .order-form input {
+            display: inline-block;
+            margin-bottom: 10px;
+            vertical-align: middle;
+        }
+
+        .order-form .form-row {
+            margin-bottom: 10px;
+        }
+
+        .order-form button {
+            margin-top: 10px;
+        }
+
+        .a {
+            padding-left: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="order-form">
+        <h2>Đặt hàng</h2>
+        <form id="orderForm">
+            <div class="form-row">
+                <label for="soluong">Số lượng</label>
+                <input type="text" id="soluong">
+            </div>
+
+            <div class="form-row">
+                <label for="sanpham">Sản phẩm</label>
+                <input type="text" id="sanpham">
+            </div>
+
+            <div class="form-row">
+                <label for="map">Loại</label>
+                <select id="map" class="a">
+                    <option value="" disabled selected>Chọn loại</option>
+                    <option value="a">a</option>
+                    <option value="b">b</option>
+                    <option value="c">c</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label for="gia">Đơn Giá</label>
+                <input type="text" id="gia">
+            </div>
+            <div class="form-row">
+                <label for="chuyen">Nơi nhận hàng</label>
+                <input type="radio" id="checkbox1" name="deliveryOption" value="Nội thành">
+                <label for="checkbox1">Nội thành</label>
+
+                <input type="radio" id="checkbox2" name="deliveryOption" value="Ngoại thành">
+                <label for="checkbox2">Ngoại thành</label>
+            </div>
+            <div class=""> <span id="vanchuyen"></span></div>
+
+
+            <button type="submit">Đặt mua</button>
+        </form>
+
+        <div id="orderInfo" style="display: none;">
+            <h3>Hóa đơn</h3>
+            <p><strong>Sản phẩm: </strong><span id="infosanpham"></span></p>
+            <p><strong>Loại: </strong><span id="infomap"></span></p>
+            <p><strong>Đơn giá: </strong><span id="infogia"></span></p>
+            <p><strong>Số lượng: </strong><span id="infosoluong"></span></p>
+            <p><strong>Nơi nhận hàng: </strong><span id="infodelivery"></span></p>
+            <p><strong>Phí giao hàng: </strong><span id="infophi"></span></p>
+            <p><strong>Tổng tiền: </strong><span id="infotongtien"></span></p>
+        </div>
+    </div>
+
+    <script>
+        const orderForm = document.getElementById("orderForm");
+        const orderInfo = document.getElementById("orderInfo");
+
+        orderForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const soluong = document.getElementById("soluong").value;
+            const sanpham = document.getElementById("sanpham").value;
+            const map = document.getElementById("map").value;
+            const gia = document.getElementById("gia").value;
+            const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked');
+
+            if (soluong.trim() === '') {
+                alert("Vui lòng điền Số lượng");
+                return;
+            }
+
+            if (isNaN(parseFloat(soluong))) {
+                alert("số lượng phải là một số");
+                return;
+            }
+            if (sanpham.trim() === '') {
+                alert("Vui lòng điền Sản phẩm.");
+                return;
+            }
+
+            if (map.trim() === '') {
+                alert("Vui lòng chọn Loại.");
+                return;
+            }
+
+            if (gia.trim() === '') {
+alert("Vui lòng điền giá");
+                return;
+            }
+
+            if (isNaN(parseFloat(gia))) {
+                alert(" giá phải là số");
+                return;
+            }
+
+            if (deliveryOption === null) {
+                alert("Vui lòng chọn Nơi nhận hàng.");
+                return;
+            }
+
+            let phiGiaoHang = 0;
+            if (deliveryOption.value === "Ngoại thành") {
+                phiGiaoHang = 1000;
+            }
+
+            const tongTien = parseFloat(gia) + phiGiaoHang;
+
+            document.getElementById("infosanpham").textContent = sanpham;
+            document.getElementById("infomap").textContent = map;
+            document.getElementById("infogia").textContent = gia;
+            document.getElementById("infosoluong").textContent = soluong;
+            document.getElementById("infodelivery").textContent = deliveryOption.value;
+            document.getElementById("infophi").textContent = phiGiaoHang;
+            document.getElementById("infotongtien").textContent = tongTien;
+
+            orderInfo.style.display = "block";
+        });
+
+
+        const deliveryOptionCheckbox1 = document.getElementById("checkbox1");
+        const deliveryOptionCheckbox2 = document.getElementById("checkbox2");
+        const vanchuyen = document.getElementById("vanchuyen");
+
+        deliveryOptionCheckbox1.addEventListener("change", function () {
+            if (this.checked) {
+                vanchuyen.textContent = "";
+            }
+        });
+
+        deliveryOptionCheckbox2.addEventListener("change", function () {
+            if (this.checked) {
+                vanchuyen.textContent = "Phí vận chuyển: 1000";
+            }
+        });
+    </script>
+</body>
+
+</html>
